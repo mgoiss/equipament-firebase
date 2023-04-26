@@ -1,11 +1,12 @@
 import { BrowserRouter } from "react-router-dom";
-import "./App.css";
+import GlobalStyle from "./globalStyles";
 import Router from "./Router";
 import Header from "./core/components/Header";
 
 function App() {
   return (
     <BrowserRouter>
+      <GlobalStyle />
       <Header />
       <Router />
     </BrowserRouter>
