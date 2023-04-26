@@ -16,6 +16,14 @@ const GlobalStyle = createGlobalStyle`
     margin-bottom: 0;
     font-weight: 700;
     }
+
+    .baseContent {
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+    }
 `;
 
 export default GlobalStyle;

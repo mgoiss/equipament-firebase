@@ -5,7 +5,7 @@ export type Client = {
   datCadastro?: Date;
 };
 
-enum Status {
+export enum Status {
   "Ativo",
   "Inativo",
 }
