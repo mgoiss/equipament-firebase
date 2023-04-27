@@ -7,6 +7,10 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
     }
 
+    body {
+        background-color: #f2f2f2;
+    }
+
     h1,
     h2,
     h3,
@@ -17,12 +21,9 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 700;
     }
 
-    .baseContent {
-        max-width: 800px;
-        width: 100%;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
+    .baseContainer {
+        margin-top: 40px;
+        margin-bottom: 40px;
     }
 `;
 

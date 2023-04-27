@@ -5,6 +5,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
@@ -15,6 +16,8 @@ import {
   NavegationLink,
   NavegationLinkMobile,
 } from "./header.styles";
+import Logo from "../Logo/Logo";
+import { Link } from "react-router-dom";
 
 const pages = ["cliente", "filial", "equipamentos"];
 
@@ -72,18 +75,34 @@ const Header = () => {
               ))}
             </Menu>
           </BoxMenuMobile>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", sm: "none" },
+              mr: 1,
+              ml: 1,
+            }}
+          >
+            <Link to={"/"}>
+              <Logo width={90} height={40} />
+            </Link>
+          </Box>
           {/* Desktop */}
+          <Box sx={{ display: { xs: "none", sm: "flex" }, mr: 3, ml: 1 }}>
+            <Link to={"/"}>
+              <Logo width={100} height={50} />
+            </Link>
+          </Box>
           <BoxMenuDesktop>
             {pages.map((page) => (
               <NavegationLink
+                key={page}
                 to={`/${page}`}
                 className={({ isActive, isPending }) =>
                   isPending ? "pending" : isActive ? "active" : ""
                 }
               >
-                <ListItemMenu key={page} onClick={handleCloseNavMenu}>
-                  {page}
-                </ListItemMenu>
+                <ListItemMenu onClick={handleCloseNavMenu}>{page}</ListItemMenu>
               </NavegationLink>
             ))}
           </BoxMenuDesktop>

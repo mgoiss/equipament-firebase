@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Box, AppBar, List, ListItemButton } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import Logo from "../Logo/Logo";
 
 export const BoxMenuMobile = styled(Box).attrs({
-  flexGrow: 1,
   display: { xs: "flex", sm: "none" },
 })``;
 
@@ -13,7 +13,7 @@ export const BoxMenuDesktop = styled(Box).attrs({
 })`
   height: 62px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 export const NavegationLinkMobile = styled(NavLink)`

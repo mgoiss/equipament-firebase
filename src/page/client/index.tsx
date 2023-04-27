@@ -4,8 +4,9 @@ import {
   GridValueGetterParams,
 } from "@mui/x-data-grid";
 import { Table } from "../../core/components";
-import { Container, Switch } from "@mui/material";
+import { Container, Switch, Button } from "@mui/material";
 import { Status } from "../../core/type";
+import { listUsers } from "../../core/utils";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", flex: 1 },
@@ -41,7 +42,7 @@ const rows = [
 
 const PageClient = () => {
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" className="baseContainer">
       <Table title="Cliente" columns={columns} rows={rows} />
     </Container>
   );
