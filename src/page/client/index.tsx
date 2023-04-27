@@ -7,6 +7,7 @@ import { Table } from "../../core/components";
 import { Container, Switch, Button } from "@mui/material";
 import { Status } from "../../core/type";
 import { listUsers } from "../../core/utils";
+import TableLoader from "../../core/components/Loaders/LoaderHeader";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", flex: 1 },
@@ -43,6 +44,7 @@ const rows = [
 const PageClient = () => {
   return (
     <Container maxWidth="lg" className="baseContainer">
+      <TableLoader />
       <Table title="Cliente" columns={columns} rows={rows} />
     </Container>
   );
