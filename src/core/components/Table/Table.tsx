@@ -1,5 +1,7 @@
 import {
   Alert,
+  Box,
+  Button,
   Card,
   CardHeader,
   CardHeaderProps,
@@ -16,6 +18,8 @@ interface TableProps extends DataGridProps {
   sx?: SxProps<Theme>;
   error?: ReactNode;
   pageSize?: number;
+  textButton: string;
+  onClickModal: () => void;
 }
 
 const localizedTextsMap = {
@@ -28,7 +32,16 @@ const localizedTextsMap = {
 };
 
 function Table(props: TableProps) {
-  const { sx, error, title, initialState = {}, pageSize, ...rest } = props;
+  const {
+    sx,
+    error,
+    title,
+    initialState = {},
+    pageSize,
+    textButton,
+    onClickModal,
+    ...rest
+  } = props;
 
   return (
     <>
@@ -45,7 +58,22 @@ function Table(props: TableProps) {
       >
         {title && (
           <>
-            <CardHeader title={title} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <CardHeader title={title} />
+              <Button
+                variant="contained"
+                sx={{ height: "90%", mr: 2 }}
+                onClick={() => onClickModal()}
+              >
+                {textButton}
+              </Button>
+            </Box>
             <Divider />
           </>
         )}

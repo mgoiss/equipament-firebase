@@ -1,11 +1,8 @@
+import { Timestamp } from "firebase/firestore";
+
 export type Client = {
   id?: string;
-  nome: string;
-  status: Status;
-  datCadastro?: Date;
+  name: string;
+  status: "Ativo" | "Inativo";
+  createdDate?: Timestamp;
 };
-
-export enum Status {
-  "Ativo",
-  "Inativo",
-}
