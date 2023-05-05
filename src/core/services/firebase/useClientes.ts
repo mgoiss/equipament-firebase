@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import { Client } from "../../type";
-import { noop } from "../../utils";
 import {
   Timestamp,
   addDoc,
@@ -11,10 +8,15 @@ import {
   query,
   updateDoc,
 } from "firebase/firestore";
+import { useState, useEffect } from "react";
+
+import { Client } from "../../type";
+import { noop } from "../../utils";
+
 import { clientes } from "./firestore";
 
 const useClientes = () => {
-  const [clientesData, setClientesData] = useState<Client[]>();
+  const [clientesData, setClientesData] = useState<Client[]>([]);
 
   useEffect(() => {
     let unsub = noop;
@@ -29,7 +31,7 @@ const useClientes = () => {
     return () => unsub();
   }, []);
 
-  const createClient = async (name: string, status: "Ativo" | "Inativo") => {
+  const createClient = async (name: string, status: boolean) => {
     const time = Timestamp.now();
 
     const { id } = await addDoc(clientes, {
@@ -41,18 +43,13 @@ const useClientes = () => {
     return id;
   };
 
-  const updateClient = async (
-    id: string,
-    name?: string,
-    status?: "Ativo" | "Inativo"
-  ) => {
-    if (!name && !status) return;
-
+  const updateClient = async (id: string, name?: string, status?: boolean) => {
+    if (!name && status === undefined && status === null) return;
     const clienteRef = doc(clientes, id);
 
     await updateDoc(clienteRef, {
       ...(name && { name }),
-      ...(status && { status }),
+      ...(status !== undefined && status !== null && { status }),
     });
   };
 
