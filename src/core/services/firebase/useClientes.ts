@@ -4,9 +4,12 @@ import { noop } from "../../utils";
 import {
   Timestamp,
   addDoc,
+  deleteDoc,
+  doc,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from "firebase/firestore";
 import { clientes } from "./firestore";
 
@@ -38,9 +41,32 @@ const useClientes = () => {
     return id;
   };
 
+  const updateClient = async (
+    id: string,
+    name?: string,
+    status?: "Ativo" | "Inativo"
+  ) => {
+    if (!name && !status) return;
+
+    const clienteRef = doc(clientes, id);
+
+    await updateDoc(clienteRef, {
+      ...(name && { name }),
+      ...(status && { status }),
+    });
+  };
+
+  const deleteClient = async (id: string) => {
+    const clienteRef = doc(clientes, id);
+
+    await deleteDoc(clienteRef);
+  };
+
   return {
     clientesData,
     createClient,
+    updateClient,
+    deleteClient,
   };
 };
 

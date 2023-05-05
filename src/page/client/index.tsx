@@ -1,51 +1,86 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  GridActionsCellItem,
+  GridCellEditStopParams,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowModel,
+  GridRowParams,
+} from "@mui/x-data-grid";
+import {
+  MenuItem,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+  TextField,
+  Box,
+  Container,
+  Switch,
+  Button,
+} from "@mui/material";
 import { Table } from "../../core/components";
-import { Box, Container, Modal, Switch, Typography } from "@mui/material";
 import { useClientes } from "../../core/services/firebase";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ModalCreation from "../../core/components/ModalCreation/ModalCreation";
 import { useForm } from "react-hook-form";
 import { Client } from "../../core/type";
-import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-
-const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", flex: 2 },
-  {
-    field: "name",
-    headerName: "Nome",
-    flex: 4,
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    flex: 1,
-    renderCell: (params: GridRenderCellParams) => (
-      <Switch checked={params.value == "Ativo"} />
-    ),
-  },
-  {
-    field: "createdDate",
-    headerName: "Data de Criação",
-    flex: 2,
-    valueGetter: ({ value }) => format(value.toDate(), "dd/MM/yyyy HH:mm:ss"),
-  },
-];
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const PageClient = () => {
-  const { clientesData } = useClientes();
+  const { clientesData, createClient, updateClient, deleteClient } =
+    useClientes();
+
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", flex: 2 },
+    {
+      field: "name",
+      headerName: "Nome",
+      flex: 4,
+      editable: true,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => (
+        <Switch
+          checked={params.value === "Ativo"}
+          onClick={() =>
+            updateClient(
+              params.row.id,
+              undefined,
+              params.value === "Ativo" ? "Inativo" : "Ativo"
+            )
+          }
+        />
+      ),
+    },
+    {
+      field: "createdDate",
+      headerName: "Data de Criação",
+      flex: 2,
+      valueGetter: ({ value }) => format(value.toDate(), "dd/MM/yyyy HH:mm:ss"),
+    },
+    {
+      field: "actions",
+      type: "actions",
+      getActions: (params: GridRowParams) => [
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          onClick={() => handleDelete(params.id.toString())}
+          label="Delete"
+        />,
+      ],
+    },
+  ];
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setValue("id", "");
     setValue("name", "");
+    setValue("status", "Ativo");
     setOpen(false);
   };
 
@@ -54,13 +89,29 @@ const PageClient = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    control,
   } = useForm<Client>();
   const [status, setStatus] = useState("");
   const handleChange = (event: SelectChangeEvent) => {
     setStatus(event.target.value);
   };
-  const onSubmit = (data: Client) => console.log(data);
+  const onSubmit = (data: Client) => {
+    createClient(data.name, data.status);
+    handleClose();
+  };
+
+  const processRowUpdate = (newRow: GridRowModel) => {
+    console.log(newRow);
+    /*if (!newRow.id) return;
+
+    updateClient(newRow.id, newRow.name, newRow.status);*/
+  };
+  const handleProcessRowUpdateError = (error: Error) => {
+    console.log({ children: error.message, severity: "error" });
+  };
+
+  const handleDelete = async (id: string) => {
+    deleteClient(id);
+  };
 
   return (
     <>
@@ -72,6 +123,15 @@ const PageClient = () => {
           getRowId={(params) => params.id}
           textButton="Adicionar"
           onClickModal={() => handleOpen()}
+          initialState={{
+            columns: {
+              columnVisibilityModel: {
+                id: false,
+              },
+            },
+          }}
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={handleProcessRowUpdateError}
         />
       </Container>
       <ModalCreation

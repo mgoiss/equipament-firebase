@@ -18,7 +18,7 @@ export const BoxModal = styled(Box).attrs({
 
 export const BoxFormModal = styled(Box).attrs({
   component: "form",
-  noValidate: "true",
+  noValidate: true,
   autoComplete: "off",
 })`
   margin-top: 40px;
